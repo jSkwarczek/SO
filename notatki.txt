@@ -1,0 +1,1543 @@
+﻿Wirtualizacja
+1. Pełna wirtualizacja – binarna translacja instrukcji z systemu gościa do sprzętu poprzez system hosta:
+   1. Wirtualizowany system operacyjny nie wymaga żadnych zmian/modyfikacji.
+   2. Większe bezpieczeństwo w izolacji awarii.
+2. Parawirtualizacja – część instrukcji i odwołań systemu gościa jest tłumaczonych, a część jest przekazywana natywnie do sprzętu:
+   1. Efektywniejsze wykorzystanie współdzielonych zasobów.
+   2. Mniejszy narzut obliczeniowy na hosta.
+3. Wirtualizacja typu 1 - całość instrukcji jest przekazywana natywnie do sprzętu
+   1. Najbardziej efektywne rozwiązanie
+
+
+Przydzielanie zasobów:
+1. CPU - można w sumie więcej niż ogólnie dostępne
+2. RAM
+3. DYSK - można w sumie więcej niż ogólnie dostępne (niestety są duże czasy dostępu)
+
+
+Wirtualizacja sprzętowa - obecnie najpopularniej używany sposób wirtualizacji (VT-x i AMD-V)
+
+
+Uprawnienia do plików - zastosowania
+
+
+0
+	---
+	blokada
+	1
+	--x
+	katalog bez podglądu
+	2
+	-w-
+	zbieranie sekretnych logów
+	3
+	-wx
+	nieprzydatne
+	4
+	r--
+	stała konfiguracja
+	5
+	r-x
+	pliki wykonywalne, katalogi
+	6
+	rw-
+	pliki edytowalne
+	7
+	rwx
+	skrypty i katalogi usera
+	
+
+	??s
+	bit suid
+	programy specjalne (program uruchomiony z uprawnieniami właściciela)
+	??t
+	sticky bit
+	katalog specjalny (użytkownicy mogą tworzyć w nim pliki, nie mogą za to usuwać nie swoich plików)
+	
+
+Uprawnienia na temat usuwania plików zależą od uprawnień katalogu.
+
+
+System operacyjny
+zarządza sprzętem komputerowym, jest pośrednikiem między użytkownikiem, a sprzętem komputerowym
+
+
+Sprzęt komputerowy - CPU, RAM, I/O devices
+
+
+Zadania systemu operacyjnego:
+1. dostarczenie środowiska do uruchamiania i zarządzania  (control program) programami użytkownika (wygoda),
+   1. Nadzorowanie działania programów użytkowych.
+   2. Przechwytywanie i przeciwdziałanie błędom.
+   3. Udostępnianie systemu komputerowego użytkownikom. (tworzenie podsystemów)
+   4. Kontrola dostępu użytkowników i programów do zasobów.
+   5. Obsługa i kontrola pracy urządzeń wejścia-wyjścia.
+2. dystrybucja zasobów (resource allocator) do efektywnej eksploatacji sprzętu komputerowego (wydajność).
+   1. Planowanie i przydział czasu procesora. (zapewnia płynność działania systemu)
+   2. Kontrola i przydział pamięci operacyjnej.
+   3. Zarządzanie pozostałymi zasobami, jak oprogramowanie czy dostęp do sieci internet.
+   4. Dostarczenie mechanizmów do synchronizacji zadań i komunikacji między zadaniami.
+
+
+
+
+Użytkownicy
+	Programy użytkowe
+	
+
+System operacyjny
+	Powłoka
+	Jądro i moduły
+	BIOS - Basic Input Output System
+	Sprzęt komputerowy
+	
+
+
+
+Podział systemów komputerowych:
+1. ze względu na wielkość
+   1. Mainframe (może oznaczać połączenie komputerów tzw. cluster)
+   2. Minicomputer
+2. ze względu na zasoby (oprogramowanie)
+   1. server
+   2. workstation
+
+
+System operacyjny to jedyny program działający cały czas na komputerze! (jądro/kernel)
+
+
+Pozostałe typy programów:
+1. systemowe (np. polecenia systemowe)
+2. aplikacyjne (aplikacje użytkowe)
+
+
+Jednostki danych
+1. bit (b) - ma wartość 1 lub 0
+   1. 1 Kib - 1024 b
+   2. 1 Mib - 2^20 b
+   3. 1 Gib - 2^30 b
+2. bajt (B) - 8 bitów
+   1. 1 KB - 1024 B
+   2. 1 MB - 2^20 B
+   3. 1 GB - 2^30 B
+3. word - natywna jednostka dla danej architektury (np. dla 64-bitowej słowo to 8 bajtów)
+
+
+Elementy systemu komputerowego
+1. Sprzęt: procesor CPU, pamięć RAM, urządzenia we-wy
+2. Systemy operacyjne: Linux/Unix, Windows, MacOS, itp.
+3. Programy użytkowe: aplikacje, systemy baz danych, gry komputerowe, oprogramowanie biurowe, środowiska programistyczne, itp.
+4. Użytkownicy: ludzie, programy, maszyny
+
+
+Uruchamianie systemu operacyjnego:
+ładowanie BIOS i Bootstrapu z ROM’u -> przekazanie sterowania do CPU -> ładowanie systemu operacyjnego -> załadowanie procesu “init”
+
+
+Przerwania pozwalają na zsynchronizowanie pracy zasobów o różnej wydajności, sygnalizują one wystąpienie zdarzenia. 
+1. Sprzętowe przerwanie może być wyzwolone przez przesłanie sygnału przez szynę systemową do procesora
+2. Programowe przerwanie może być wyzwolone specjalną operacją, tzw. system call lub monitor call
+W momencie wystąpienia przerwania, procesor przerywa aktualnie wykonywaną operację, wykonuje procedurę przewidzianą dla danego zdarzenia i wraca do przerwanej operacji.
+
+
+Struktura pamięci
+RAM
+	random access memory
+	pamięć, do której ładowane są programy do wykonania oraz dane dla tych programów
+
+
+	DRAM
+	dynamic random-access memory
+	technologia półprzewodnikowa z której korzysta RAM
+	ROM
+	read-only memory
+	pamięć, w której przechowywane są niezmienialne programy, np. wgrane gry do konsol wideo
+	EEPROM
+	erasable programmable read-only memory
+	pamięć, która nie może być zbyt często nadpisywana, np. system operacyjny urządzeń mobilnych
+	Rejestr
+	
+
+	szybka, niewielka pamięć przy/w procesorze na czas wykonywania pojedynczej instrukcji
+	Pamięć NVRAM
+	nonvolatile RAM
+	odpowiedni pamięci RAM podtrzymywany bateryjnie
+	Pamięć stała (np. HDD)
+	
+
+	dysk optyczny, pen drive, itp.
+	
+
+Pamięć ROM zachowuje dane po odcięciu napięcia, odwrotnie niż RAM.
+
+
+Historia rozwoju systemów operacyjnych
+1. Proste systemy wsadowe:
+   1. Pierwsze komputery:
+      1. Wejście: czytniki kart i przewijaki taśm
+      2. Wyjście: drukarki wierszowe, przewijaki taśm, perforatory kart
+   2. Zadanie na karcie perforowanej: program, dane, karty sterujące
+   3. Czas obliczeń: > minuty (czasem dni)
+   4. System operacyjny umieszczony na stałe w pamięci operacyjnej
+   5. Grupowanie zadań o podobnych wymaganiach: wsad (batch)
+   6. Komputer obsługiwał operator, który pobierał i sortował programy
+   7. Istotna różnica w szybkości działania procesora w porównaniu z we/wy
+   8. Następstwem było wprowadzenie technologii dyskowej
+
+
+2. Wieloprogramowe systemy wsadowe:
+   1. Zastosowanie pamięci o dostępie swobodnym (dysków)
+   2. Wczytywanie kart na dysk i zapamiętanie położenia danych => spooling
+   3. Pula zadań (job pool) - wczytanie pewnej liczby zadań na dysk
+   4. Możliwość dobierania zadań z dysku tak, aby zwiększyć efektywność jednostki centralnej
+   5. Planowanie zadań (scheduling) - planowanie zadań i planowanie przydziału procesora
+
+
+3. Systemy z podziałem czasu:
+   1. Problemy systemów wieloprogramowych:
+      1. wielowariantowość ścieżek wykonywania
+      2. brak możliwości modyfikowania programu
+      3. długi czas od rozpoczęcia tworzenia programu do wyniku jego działania
+   2. Podział czasu, wielozadaniowość, multitasking
+   3. Interakcyjność, hands-on - wymiana danych z programem w ciągu jego trwania
+   4. System plików (file, filesystem):
+      1. zestaw powiązanych informacji
+      2. format, typ
+      3. organizacja w katalogi
+   5. Bezpośredni dostęp użytkownika do komputera (bez operatora)
+   6. Pamięć wirtualna - wspomaganie pamięci operacyjnej pamięcią dyskową
+   7. Problem zakleszczenia - wzajemne oczekiwanie programów na zasoby
+
+
+4. Systemy dla komputerów osobistych:
+1. Zmniejszenie cen sprzętu
+2. Rozwój linii komputerów PC (personal computer)
+3. Początkowo systemy operacyjne dla pierwszych komputerów osobistych: nie wielostanowiskowe, nie wielozadaniowe, lecz z czasem je rozwinięto
+4. Microsoft: MS-DOS, później Microsoft Windows
+5. IBM: MS-DOS (od Microsoft), później OS/2
+6. Apple: Macintosh, później iOS
+7. Bell Laboratories: UNIX dla PDP-11 (wiele koncepcji z systemu MULTICS dla komputera GE 645)
+8. Na bazie rozwiązań UNIX w latach ‘80 => Windows NT, IBM OS/2, Macintosh Operating System
+
+
+5) Systemy wieloprocesorowe, równoległe:
+1. Zwiększona przepustowość
+2. Współczynnik przyspieszenia, który nie zawsze powiela wydajność
+3. Współużytkowanie urządzeń zewnętrznych
+4. Zwiększenie niezawodności (redundancja/nadmiarowość węzłów obliczeniowych)
+5. Wieloprzetwarzanie symetryczne - w każdym procesorze działa identyczna kopia
+   1. Działa N procesów na N egzemplarzach jednostki centralnej
+   2. Może się zdarzyć niezbalansowanie obciążenia procesorów
+   3. Wersja Encore systemu UNIX dla komputera Multimax
+   4. SunOS w wersji 5 (Solaris 2) dla komputerów Sun
+6. Wieloprzetwarzanie asymetryczne - każdy procesor ma inne zadanie (+procesor główny)
+   1. Np. słabsze procesory obsługują komunikację (front-end)
+   2. IBM i komputer IBM Series/1 jako procesor czołowy
+   3. SunOS w wersji 4 dla komputerów Sun
+
+
+6) Systemy rozproszone, systemy klastrowe:
+1. Systemy luźno powiązane (loosely coupled), rozproszone (distributed systems)
+2. Rozdzielenie geograficzne
+3. Połączenie przez linie telekomunikacyjne (internet, linie telefoniczne, itp.)
+4. Zróżnicowanie architektur poszczególnych węzłów (node)
+5. Zróżnicowanie mocy obliczeniowych poszczególnych węzłów
+6. Cechy:
+   1. Podział zasobów        
+   2. Przyspieszenie obliczeń
+   3. Niezawodność
+   4. Komunikacja
+
+
+7) Systemy czasu rzeczywistego (real-time):
+1. Zastosowanie:
+   1. surowe wymagania na czas wykonania operacji lub przepływu danych
+2. Przykłady:
+   1. Jednokierunkowe sterowanie maszyną według zadanego programu
+   2. Odczytywanie wartości czujników
+   3. Analiza odczytanych wartości czujników i adekwatna reakcja robota
+   4. Analiza otoczenia, przetwarzanie danych (sygnałów, obrazów) i podejmowanie decyzji
+3. Odmiany systemów czasu rzeczywistego:
+   1. Rygorystyczny (Hard real-time system) - terminowe wypełnienie krytycznych zadań
+   2. Łagodny (Soft real-time system) - krytyczne zadanie do obsługi otrzymuje pierwszeństwo
+
+
+System operacyjny musi tak zarządzać dostępem do pamięci, aby zminimalizować efekt NUMA.
+1. UMA - uniform memory access - pamięć o jednorodnym czasie dostępu
+2. NUMA - non-uniform memory access - pamięć o niejednorodnym czasie dostępu
+
+
+
+
+Tryby pracy systemu operacyjnego
+	Tryb użytkownika (mode bit 1)
+	Tryb jądra (mode bit 0)
+	Procesy w trybie użytkownika mają ograniczone uprawnienia, co zapewnia większe bezpieczeństwo. Nie mają bezpośredniego dostępu do sprzętu ani pełnej kontroli nad pamięcią systemową.
+	Procesy w trybie jądra mają pełny dostęp do zasobów sprzętowych i pamięci systemowej. Mają nieograniczone uprawnienia, co umożliwia bezpośredni dostęp do sprzętu i zarządzanie pamięcią fizyczną.
+	
+
+
+
+Interfejs użytkownika
+1. Graficzny interfejs użytkownika (GUI - graphical user interface) to najpopularniejszy wśród użytkowników biurowych interfejs człowiek-komputer.
+2. Interpreter poleceń (CLI - command-line interface) jest interfejsem użytkownika (UI) przyjmującym komendy tekstowe oraz funkcje.
+3. Interfejs batch to zbiór komend i dyrektyw kontrolujących te komendy zapisanych w pliku, który po uruchomieniu kolejno uruchamia komendy z tego pliku.
+4. Interpreter poleceń (shell): sh (Bourne shell), bash (Bourne-Again shell), csh (C shell), zsh (Z shell), ksh (Korn shell), itp.
+5. Interpretacja poleceń: polecenie systemowe (np. cd) lub program (np. rm).
+
+
+Procesy
+Tworzenie programu:
+Kod źródłowy -> Kompilacja -> Linkowanie -> Kod binarny
+
+
+Utworzenie procesu:
+        Kod binarny -> Wczytywanie do pamięci operacyjnej -> Nadanie PCB -> Proces
+
+
+Proces to:
+1. wczytany do pamięci i uruchomiony kod
+2. jednostka pracy w systemie z dzieleniem czasu
+
+
+Pierwsze systemy operacyjne: jeden program, który ma dostęp do wszystkich zasobów (tzw. job).
+Obecnie: zarządzanie uruchomionymi programami, czyli procesami (user program, task obecnie process)
+
+
+Zarządzanie procesami obejmuje: kontrole i separacje
+System zawiera kolekcje procesów:
+   1. procesy systemu operacyjnego
+   2. procesy użytkownika
+Potencjalnie wszystkie w/w procesy uruchamiane są jednocześnie. Procesor(y) przełączają się między procesami, co zwiększa efektywność systemu komputerowego
+
+
+Powoływanie (tworzenie)
+	* nowe zadanie wsadowe
+* interaktywne logowanie
+* utworzenie usług przez system operacyjny
+* podział (spawn) istniejącego procesu
+	Terminowanie
+	* prawidłowe zakończenie
+* brak pamięci
+* naruszenie ochrony
+* interwencja operatora lub systemu operacyjnego
+	
+
+Proces zostaje zatrzymany przez:
+1. instrukcję HALT
+2. akcję użytkownika
+3. awarię lub błąd
+4. terminowanie procesu rodzica
+
+
+Powiązane komendy: $ jobs, $ bg, $ fg
+
+
+
+
+
+
+
+
+Proces składa się z:
+Stos (stack) - parametry procedur, adresy powrotne (po wykonaniu danej instrukcji), zmienne tymczasowe
+	↓
+↑
+	Sterta (heap) - pamięć przydzielana dynamicznie
+	Sekcja danych (data section) - zmienne globalne (w C podzielne są na zainicjalizowane i niezainicjalizowane)
+	Licznik programu (program counter)
+	Kod programu (text section)
+	
+
+Proces może być:
+1. aktywny - licznik rozkazów wskazuje następną instrukcję
+2. pasywny - plik wykonywalny zawiera listę instrukcji
+
+
+  
+
+Źródło: A. Silberschatz, Operating Systems Concepts Essentials
+
+
+
+
+Powody zawieszenia procesu:
+1. Swapping - system musi zwolnić pewną ilość pamięci, aby uruchomić proces, który jest gotowy do wykonania
+2. Inny problem SO - błędy
+3. Interaktywne żądanie użytkownika
+4. Timing - periodyczne wywołanie procesu (np. monitorowanie) i może on zostać zawieszony do następnego wywołania
+5. Żądanie procesu macierzystego - SIGSTOP / SIGTSTP / SIGCONT (SIGTSTP może zostać zignorowany SIGSTOP nie)
+PCB (process control block) - blok kontrolny procesu
+Obszar pamięci zawierające różne informacje skojarzone z procesem, którego dotyczy.
+
+
+Process state
+	Process number
+	Program counter
+	Register
+	Memory limits
+	List of open files
+	. . .
+	
+
+
+
+Stan procesu:
+Polecenia:
+        $ ps -p pid_procesu -o pid,status,comm
+        $ cat /proc/pid_procesu/status | grep Stat
+        
+Możliwe stany:
+1. R - running
+2. S - sleeping in an interruptible wait
+3. D - waiting in uninterruptible disk sleep
+4. Z - zombie
+5. T - traced or stopped (on a signal)
+6. W - paging
+
+
+Numer procesu (PID):
+Polecenia:
+        $ pidof nazwa_programu
+        $ ps aux | grep nazwa_programu
+
+
+Przydatne funkcje (unistd.h):
+        pid_t getpid(void);
+        pid_t getppid(void);
+        pid_t fork(void);
+
+
+Licznik rozkazów:
+Adres kolejnej instrukcji do wykonania.
+
+
+Rejestry procesora (CPU registers):
+M.in. akumulatory, rejestry indeksowe, wskaźniki stosu, rejestry ogólnego przeznaczenia, rejestry warunków, etc.
+
+
+Informacje o planowaniu przydziału procesora (CPU-scheduling information):
+M.in. priorytet procesu, wskaźnik do kolejek, etc.
+
+
+Informacje o zarządzaniu pamięcią (Memory-management information):
+M.in. zawartość rejestrów granicznych, tablice stron lub tablice segmentów, etc.
+
+
+Informacje do rozliczeń (Accounting information):
+Ilość zużytego czasu procesora i czasu rzeczywistego, ograniczenia czasowe, numery kont, numer zadania lub procesu, itp.
+
+
+Informacja o stanie wejścia-wyjścia (I/O status information): M.in. lista urządzeń we/wy przydzielonych do procesu, lista otwartych plików, itd.
+
+
+  
+
+Źródło: A. Silberschatz, Operating Systems Concepts Essentials
+
+
+
+
+Tworzenie procesów
+1. Dany proces (rodzic - parent) może utworzyć wiele nowych procesów (dziecko - child)
+2. Każdy z nowo powstałych procesów może tworzyć kolejne, powstaje drzewo - tree procesów
+3. Identyfikacja procesu w większości systemów odbywa się przez identyfikator PID
+4. Kiedy dany proces utworzy proces potomny, mogą zaistnieć dwa przypadki:
+   1. Proces rodzica wykonuje się nadal jednocześnie z procesem potomnym (fork)
+   2. Proces rodzica czeka, aż któryś lub wszystkie procesy potomne zakończą działanie (fork lub system)
+5. Są także dwie możliwości adresowania pamięci dla nowego procesu:
+   1. Proces potomny jest duplikatem procesu rodzica, tzn. ma ten sam kod programu jak rodzic (fork)
+   2. Proces potomny to na nowo załadowany program (exec i system)
+
+
+  
+
+Aby uruchomić nowy proces można wykorzystać połączenie funkcji fork() i exec().
+
+
+Współistnienie procesów (IPC - interprocess communication)
+1. Proces niezależny - nie wpływają na niego, ani nie wpływa na inne procesy
+2. Proces kooperujący - może wpływać na inne procesy lub inne procesy mogą wpływać na niego
+
+
+
+
+Znaczenie komunikacji międzyprocesowej:
+1. Współdzielenie informacji (dane, wymiana komunikatów)
+2. Przyspieszenie obliczeń 
+3. Modularność systemu
+4. Wygoda
+
+
+  
+
+Źródło: A. Silberschatz, Operating Systems Concepts Essentials
+
+
+
+
+Message passing
+	Shared memory
+	* Użyteczny do wymiany niewielkich ilości danych (brak konieczności zapobiegania konfliktom)
+* Łatwiejszy w implementacji
+	* Najszybsza możliwa komunikacja
+* Jedyna wymagana interwencja z kernela to utworzenie tej pamięci
+	
+
+Model konsument-klient:
+* serwer WWW i przeglądarka HTML
+* kompilator tex i pdf viewer
+
+
+Shared memory - bufory wymiany danych:
+1. Bufor nieograniczony (unbounded buffer) - brak limitu wielkości:
+   1. Producent nigdy nie czeka, konsument czeka gdy bufor jest pusty
+2. Bufor ograniczony (bounded buffer) - określona wielkość bufora:
+   1. Producent czeka, gdy bufor jest pełny, konsument czeka gdy bufor jest pusty
+
+
+Synchronizacja - message passing może być blokujący lub nieblokujący:
+1. blokujące wysyłanie
+2. nieblokujące wysyłanie
+3. blokujący odbiór
+4. nieblokujący odbiór
+
+
+
+
+Rozmiar bufora
+	Zerowa pojemność (zero capacity) - kolejka ma długość zero
+
+
+
+
+
+
+	Ograniczona długość (bounded capacity) - kolejka ma ustaloną długość
+	Nieograniczona długość (unbounded capacity) - kolejka ma nieograniczoną długość
+	
+
+Wątki
+Wątek to podstawowa jednostka wykorzystania procesora.
+
+
+Wątek zawiera:
+1. identyfikator (numer)
+2. licznik rozkazów
+3. rejestry
+4. stos.
+
+
+Wątek współdzieli z innymi wątkami należącymi do tego samego procesu:
+1. sekcję kodu
+2. sekcję danych
+3. inne zasoby systemu operacyjnego (np. otwarte pliki, sygnały).
+
+
+Proces
+	Wątek
+	* Proces to wykonywanie programu.
+
+
+* Heavyweight process.
+
+
+* Czaso- i zasobochłonne: tworzenie, terminacja, przełączanie kontekstu.
+
+
+* Komunikacja: pamięć dzielona lub wymiana komunikatów jako mechanizmy specjalne.
+
+
+* Procesy są izolowane.
+
+
+* Przełączanie procesów odbywa się przez funkcje systemowe.
+
+
+* Dla jądra dwa procesy to dwa procesy.
+
+
+* Zablokowanie jednego procesu nie wpływa na fakt zablokowania innego procesu.
+
+
+* Zablokowanie się procesu macierzystego uniemożliwia tworzenie procesów potomnych.
+
+
+* Proces ma własny PCB, stos oraz przestrzeń adresową.
+
+
+* Zmiany w procesie macierzystym nie mają wpływu na procesy potomne.
+
+
+	* Wątek to część danego procesu.
+
+
+* Lightweight process.
+
+
+* Szybsze i zużywające mniej zasobów na tworzenie, terminację i przełączanie kontekstu.
+
+
+* Komunikacja: bezpośrednio współdzielone wszystkie zasoby danego procesu.
+
+
+* Wątki współdzielą.
+
+
+* Przełączanie wątków odbywa się bez wywoływania przerwań do jądra.
+
+
+* Dla jądra dwa wątki to jeden proces.
+
+
+* Zablokowanie procesu, to zablokowanie jego wszystkich wątków.
+
+
+* Zablokowanie pierwszego wątku nie wpływa na działanie pozostałych wątków procesu.
+
+
+* Ma rodzica PCB, własny TCB, stos oraz współdzieloną przestrzeń adresową.
+
+
+* Zmiany w procesie wpływają na zmiany w wątkach tego procesu.
+	
+
+
+
+Obserwowanie wątków w systemie Linux:
+        $ ps -T -o pid,tid,comm -p pid_procesu
+        $ pstree -p pid_procesu
+
+
+Dla wątków kernela:
+        $ pstree -p 2
+Mają one odmienne TID.
+  
+
+Źródło: A. Silberschatz, Operating Systems Concepts Essentials
+
+
+
+
+PID (process identifier)
+	TID (thread identifier)
+	* Jeśli proces ma tylko jeden wątek, to PID == TID
+
+
+* Jeśli proces ma wiele wątków, to pierwszy z nich ma unikalny TID w zakresie tego procesu
+
+
+* Jądro systemu nie rozróżnia szczególnie wątku od procesu
+
+
+* Dla jądra wątki to procesy, które współdzielą pewne zasoby
+
+
+* Kiedy tworzymy nowy proces za pomocą fork(), to otrzymuje on nowy PID i TID (PID == TID)
+
+
+* Kiedy tworzymy nowy wątek to otrzymuje on PID taki jak procesu oraz nowy TID.
+
+
+* Alias: LWP = Light-Weight Process
+	
+
+
+
+Wątki na poziomie użytkownika:
+Zarządzanie wątkami odbywa się na poziomie aplikacji. Jądro nie ma wiedzy na temat wątków.
+
+
+Wątki na poziomie jądra:
+Jądro zarządza kontekstem dla procesu oraz wątków. Nie ma zarządzania wątkami na poziomie aplikacji.
+
+
+
+
+Zalety:
+1. Kernel może jednocześnie planować realizację wielu wątków z jednego procesu na wielu procesorach/rdzeniach.
+2. Jeśli jeden wątek w procesie jest zablokowany, jądro może planować inny wątek tego samego procesu.
+3. Funkcjonalność jądra może być wielowątkowa.
+Wada:
+1. przekazanie kontroli między wątkami w obrębie procesu wymaga kernel-mode.
+
+
+Istnieje rozwiązanie łączone - tworzenie wątku odbywa się w przestrzeni użytkownika, planowanie (scheduling) oraz synchronizacja wątków odbywa się w jądrze
+
+
+Zastosowanie wątków:
+1. Program serwera obsługujący żądania (requests) programów klienckich:
+   1. Serwer stron WWW i przeglądarka internetowa.
+   2. Serwer poczty elektronicznej (mail transfer agent) i program pocztowy.
+   3. Sprawdzanie pisowni w edytorze tekstu.
+2. Prowadzenie obliczeń macierzowych:
+   1. Wykonywanie operacji na tych samych danych.
+
+
+Uwaga! Tworzenie wątku jest mniej obciążające niż tworzenie nowego procesu.
+
+
+Wielowątkowość - zdolność systemu operacyjnego do wspierania wielu ścieżek wykonywania w obrębie jednego procesu.
+
+
+MS-DOS
+	Some UNIX
+	JRE
+	Windows, Solaris, modern UNIX, Linux, etc.
+	Jeden proces jednowątkowy
+	Wiele procesów jednowątkowych
+	Jeden proces wielowątkowy
+	Wiele procesów wielowątkowych
+	
+
+Zalety wielowątkowości:
+1. Responsywność - jeśli część aplikacji jest zablokowana, inna jej część może wykonywać operacje, a cała aplikacja sprawia wrażenie ciągłego działania. Zastosowanie: w aplikacji, kiedy jedna wywołana operacja wykonywana jest w tle, interfejs użytkownika pozostaje responsywny.
+2. Współdzielenie zasobów - w przypadku procesów współdzielenie zasobów odbywa się tylko poprzez pamięć współdzieloną, albo przesyłanie komunikatów. Wątki współdzielą zasoby wprost. Współdzielenie kodu i danych umożliwia wątkom działać w tej samej przestrzeni adresowej.
+3. Ekonomia - alokowanie pamięci i zasobów przy tworzeniu procesu jest bardziej kosztowne, niż w przypadku wątków. Przełączanie przełączanie kontekstu jest także szybsze w przypadku wątków.
+4. Skalowalność - aplikacje wielowątkowe mogą działać w architekturze wielordzeniowej. Aplikacja jednowątkowa może być wykonana tylko na jednym rdzeniu procesora.
+
+
+
+
+Współbieżność
+(concurrency)
+	Umożliwia więcej niż jednemu zadaniu być wykonywanym. Do realizacji współbieżności nie jest wymagany system wielordzeniowy
+	Równoległość
+(parallelism)
+	Umożliwia więcej niż jednemu zadaniu być wykonywanym jednocześnie. Do realizacji równoległości jest wymagany system wielordzeniowy.
+	  
+
+  
+
+Źródło: A. Silberschatz, Operating Systems Concepts Essentials
+
+
+Wyzwania programowe:
+1. Identyfikacja zadań, w szczególności na zadania niezależne między sobą.
+2. Balansowanie zadaniami celem zrównoważenia obciążenia.
+3. Dzielenie danych między wydzielone zadania.
+4. Zależność danych występująca w szczególności przy następstwie obliczeń.
+5. Testowanie i debugowanie są zdecydowanie trudniejsze niż w programach jednowątkowych.
+W trybie równoległości:
+* dane dzielone są między procesami rdzeniami wykonującymi tego samego typu operacje
+* zadania dzielone są między procesami/rdzeniami, a każdy wątek realizuje unikalną operację
+
+
+Prawo Amdahla
+Wyraża potencjalny wzrost wydajności obliczeń przez dodanie kolejnych rdzeni obliczeniowych do obsługi aplikacji, która ma dwa komponenty: podlegający i niepodlegający zrównolegleniu.
+
+
+S - procentowy udział niepodlegającego zrównolegleniu kodu.
+N - liczba rdzeni przypisanych do zadania.
+
+
+
+
+
+Modele wielowątkowe
+Many-to-One
+  
+
+
+
+
+
+One-to-One
+  
+
+
+
+Many-to-Many
+  
+
+
+
+Two-level
+  
+
+Źródło: A. Silberschatz, Operating Systems Concepts Essentials
+
+
+
+
+Many-to-One
+	Zarządzanie wątkami wykonywane jest w przestrzeni użytkownika (przez bibliotekę).
+
+
+Zalety:
+* wydajność
+Wady:
+* zablokowanie całego procesu, jeśli któryś wątek wykona blokujące wywołanie systemowe
+* wątki nie zostaną uruchomione równolegle w systemie wielordzeniowym, to tzw. zielone wątki (green threads) - można je uruchomić w środowisku nie wspierającym wielowątkowości.
+
+
+Przykłady: Solaris, wczesne wersje Java.
+	One-to-One
+	Model wprowadza niezależną współbieżność, tzn. dany wątek może być realizowany także wtedy, gdy inny wywoła blokującą funkcję systemową.
+Model wprowadza także równoległość.
+
+
+Wady:
+* każdy wątek użytkownika tworzy wątek w jądrze, a duża ich liczba może obniżać wydajność systemu.
+
+
+Przykłady: Linux, Windows.
+	Many-to-Many
+	Model multiplexuje wiele wątków w przestrzeni użytkownika z równą lub mniejszą liczbą wątków w przestrzeni jądra. Liczba wątków w przestrzeni jądra może być specyficzna względem aplikacji lub sprzętu.
+
+
+Model ten jest pozbawiony wad modeli Many-to-One i One-to-One.
+
+
+Trudny w implementacji.
+	
+
+Strategie tworzenia wątków:
+Strategia asynchroniczna - wątek tworzy wątek potomny i następnie kontynuuje swoje działanie. Oba wątki działają współbieżnie i niezależnie.
+	Strategia synchroniczna - wątek tworzy wątki potomne i przechodzi w stan oczekiwania na zakończenie wykonywania ich zadań. O ile wątki potomne działają współbieżnie, to wątek macierzysty po prostu czeka.
+	Zastosowanie:
+* Serwery wielowątkowe.
+* Responsywny interfejs użytkownika.
+	Zastosowanie:
+* Obliczenia z przesłaniem zadań cząstkowych i oczekiwaniem na wyniki.
+	
+
+Pula wątków
+Problem:
+* Tworzenie wątków zajmuje pewien czas (mniejszy niż procesów potomnych), a może mogą być wykorzystane ponownie.
+* Brak kontroli liczby powstających wątków może doprowadzić do przeciążenia zasobów (procesor, pamięć) systemu.
+
+
+Rozwiązanie: pula wątków (thread pool)
+1. Utworzenie zadanej liczby wątków.
+2. Umieszczanie wątków w puli wątków.
+3. Wątki oczekują na przydzielenie zadania.
+4. Serwer otrzymuje żądanie.
+5. Serwer przekazuje żądanie do puli wątków.
+6. Jeśli w puli jest wolny wątek, przejmuje on żądanie i zajmuje się jego obsługą.
+7. Jeśli brak jest wolnych wątków w puli, zadanie jest kolejkowane.
+8. Po zakończeniu obsługi danego żądania wątek wraca do puli i oczekuje na nowe.
+9. Pula wątków najlepiej działa, gdy zadania obsługiwane są asynchronicznie.
+
+
+Rozmiar puli wątków może być zależny od:
+* Liczby rdzeni procesora.
+* Ilości fizycznej pamięci RAM.
+* Może być też dynamicznie zmieniany w zależności od aktualnie działających wątków (obserwując ich obciążenie).
+
+
+Proces powstały w wyniku wywołania funkcji systemowej fork() jest jednowątkowy! Wątek wywołujący procesu nadrzędnego staje się initial wątkiem procesu potomnego. Wywołanie exec() spowoduje zastąpienie całego procesu i wszystkich wątków.
+
+
+Obsługa sygnałów
+Procedura obsługi sygnałów:
+* Sygnał jest generowany przez zdarzenie.
+* Sygnał jest dostarczany do procesu.
+* Proces musi obsłużyć sygnał:
+   * domyślna obsługa sygnału - jeśli brak zdefiniowanej obsługi sygnału, zajmuje się nią jądro systemu operacyjnego (sygnał może być zignorowany lub zakończyć działanie programu),
+   * zdefiniowana przez użytkownika obsługa sygnału.
+
+
+Rodzaje sygnałów:
+Sygnał synchroniczny:
+np. dzielenie przez 0 lub nielegalny dostęp do pamięci
+	Sygnał asynchroniczny:
+np. wciśnięcie [Ctrl + c]
+	
+
+Zgodnie z POSIX, to który wątek odbierze sygnał nie jest określone.
+
+
+Dostarczanie sygnału:
+1. Do wątku, do którego sygnał pasuje.
+2. Do każdego wątku w procesie.
+3. Do wybranych wątków w procesie.
+4. Wybrać jeden wątek do przechwytywania wszystkich sygnałów danego procesu.
+
+
+Wysłanie sygnału do procesu:
+        kill(pid_t pid, int signal);
+pthread_kill(pthread_t tid, int signal);
+
+
+Podstawy komunikacji międzyprocesowej
+Procesy uruchomione jednocześnie mogą być:
+1. Niezależne (independent) - nie współdzielą danych z żadnym innym wykonywanym procesem w systemie operacyjnym.
+2. Współpracujące (cooperating) - może wpływać lub można na niego wpływać przez inne procesy wykonywane w systemie.
+
+
+Proces odczytujący dane z dysku może być procesem współpracującym jak i niezależnym, zależy to od tego czy proces ma dostęp bezpośredni czy pośredni do dysku.
+
+
+Zastosowania komunikacji międzyprocesowej:
+* Współdzielenie informacji
+* Przyspieszenie obliczeń
+* Modularność oprogramowania
+
+
+Metody dzielenia informacji:
+Przez system plików
+	Przez współdzielone informacje z jądra
+	Przez współdzieloną
+pamięć
+	
+
+Implementacja IPC:
+1. Wymiana przez pliki
+2. Pamięć dzielona
+3. Sygnały
+4. Potoki nazwane lub nienazwane
+5. Semafory
+6. Kolejki
+7. Gniazda dziedziny UNIX
+8. Gniazda udp/tcp
+9. RPC
+
+
+
+
+Trwałość obiektów IPC:
+
+
+  
+  
+
+Źródło: R. Stevens, Unix Network Programming - IPC
+
+
+Message-Passing Systems (systemy przekazywania wiadomości):
+1. Komunikujące się procesy mogą rezydować na różnych stacjach
+2. Komunikujące się procesy mogą rezydować na różnych typach i wersjach systemów operacyjnych
+3. Infrastruktura systemu przekazywania wiadomości obejmuje co najmniej dwie operacje:
+   1. send(message)
+   2. receive(message)
+4. Ze względu na wielkość wiadomości rozróżniamy:
+   1. System bezpośredni, czyli o stałej długości komunikatów (straight-forward) - prosta implementacja w systemie operacyjnym, skomplikowane użytkowanie ze względu na fragmentację,
+   2. System o zmiennej długości komunikatów (variable-sized) - skomplikowana implementacja w systemie operacyjnym, proste użytkowanie.
+
+
+Communication link - logiczne powiązanie między procesami zestawiające kanał komunikacji między nimi. Nie interesuje nas zatem, czy to jest shared memory, szyna sprzętowa, czy sieć.
+
+
+
+
+Implementacje tego powiązania obejmują zagadnienia:
+Komunikacja bezpośrednia
+	Komunikacja pośrednia
+	Każdy proces, który uczestniczy w komunikacji musi bezpośrednio wskazać nadawcę, czy odbiorcę:
+* send(P, message) - wyślij wiadomość do procesu P.
+* receive(Q, message) - odbierz wiadomość od procesu Q.
+
+
+Własności:
+* Link jest zestawiany automatycznie, a procesy muszą tylko znać swoją nazwę.
+* Link jest zestawiany dokładnie między dwoma procesami.
+* Między każdą parą komunikujących się procesów zestawiany jest dokładnie jeden link.
+* Występuje symetria w adresacji (P, Q), choć spotykane są warianty asymetryczne (np. P i id).
+	Procesy komunikują się przez skrzynki (mailbox) lub porty identyfikowane np. przez liczby całkowite:
+* send(A, message) - wyślij wiadomość do skrzynki A.
+* receive(A, message) - odbierz wiadomość ze skrzynki A.
+
+
+Własności:
+* Link jest zestawiany między parą współdzielących skrzynkę procesów.
+* Link jest może zostać zestawiony przez większą liczbę procesów.
+* Między każdą parą komunikujących się procesów mogą istnieć różne linki komunikacyjne.
+
+
+System operacyjny musi obsłużyć następujące mechanizmy:
+* Utworzenie skrzynki.
+* Wysyłanie i odbieranie wiadomości do i ze skrzynki.
+* Usunięcie skrzynki.
+
+
+	Komunikacja synchroniczna (blokująca)
+	Komunikacja asynchroniczna (nieblokująca)
+	Blokujące wysyłanie - proces wysyłający jest zablokowany na wysyłaniu, aż wysyłana wiadomość zostanie odebrana przez proces odbierający lub skrzynkę.
+
+
+
+
+Blokujący odbiór - odbiorca zostaje zablokowany do czasu otrzymania wiadomości.
+
+
+W przypadku blokującego nadawcy i odbiorcy mamy do czynienia z Rendezvous.
+	Nieblokujące wysyłanie - proces wysyłający wysyła wiadomość i nie jest blokowany na metodzie wysyłającej.
+
+
+
+
+
+
+Nieblokujący odbiór - odbiorca otrzymuje gotową wiadomość lub informację o braku jej dostępności.
+	Buforowanie
+	Pojemność zerowa
+	Ograniczona pojemność
+	Nieograniczona pojemność
+	Maksymalna długość kolejki wynosi zero, czyli link komunikacyjny nie może mieć żadnej wiadomości oczekującej w sobie, co oznacza, że nadawca musi zostać zablokowany do czasu odbioru wiadomości przez odbiorcę.
+	Kolejka ma określoną, skończoną długość n, czyli co najwyżej n wiadomości może zostać umieszczonych w kolejce. Jeśli kolejka nie jest pełna, można dołożyć wiadomość (nadawca zostaje zablokowany), jeśli kolejka jest pusta, nie można pobrać żadnej wiadomości (odbiorca zostaje zablokowany).
+	Długość kolejki jest potencjalnie nieskończona (nadawca nigdy nie jest blokowany).
+	
+
+
+
+POSIX Shared Memory
+
+
+Tworzenie dowiązania do wspólnej przestrzeni w pamięci
+	Pisanie i czytanie:
+int fd = shm_open(name, O_CREAT | O_RDWR, 0666);
+
+
+Tylko czytanie:
+int fd = shm_open(name, O_RDONLY, 0666);
+	Ustawianie wielkości pamięci dzielonej
+	ftruncate(fd, 4096);
+	Utworzenie miejsca w pamięci
+	ptr = (char *) mmap (0, SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+	Pisanie do pamięci dzielonej
+	Umieszczenie komunikatu w miejscu ‘ptr’:
+sprintf(ptr, "%s", message);
+
+
+Przesunięcie wskazania w pamięci:
+sprintf(ptr, "%s", message);
+	Czytanie z pamięci dzielonej
+	printf(“%s”, (char *)ptr);
+	Usunięcie obiektu współdzielonego
+	shm_unlink(name);
+	
+
+  
+
+
+
+  
+
+Źródło: R. Stevens, Unix Network Programming - IPC
+Potok (pipe)
+Jedne z pierwszych metod IPC, jedna z najprostszych form komunikacji.
+
+
+
+
+Przy projektowaniu potoków należy uwzględnić cztery kwestie:
+1. Czy potok pozwala na dwukierunkową (bidirectional), czy jest to jednokierunkowa (unidirectional) komunikacja?
+2. Jeśli możliwa jest komunikacja dwukierunkowa, to czy jest ona half duplex (dane przesyłane są tylko w jednym kierunku w danym momencie), czy full duplex (dane przesyłane są w obu kierunkach w danym momencie)?
+3. Czy jest relacja między komunikującymi się procesami (np. rodzic - dziecko)?
+4. Czy potoki mogą komunikować się poprzez sieć, czy tylko między procesami na tej samej maszynie?
+
+
+Utworzenie potoku
+	int fd[2];
+pipe(int fd[]);
+	Pisanie do potoku (deskryptor fd[1])
+	write(fd[WRITE END], write msg, strlen(write msg)+1);
+	Czytanie z potoku (deskryptor fd[0])
+	read(fd[READ END], read msg, BUFFER SIZE);
+	
+
+W praktyce:
+        $ ls | less
+        $ cat file.txt | wc -l
+
+
+Ponieważ fork() dziedziczy od procesu rodzica deskryptory, a potok jest deskryptorem, zaleca się odpiąć potok od rodzica, jeżeli dziecko ma go obsługiwać.
+
+
+Kooperacja procesów
+
+
+Sposoby kooperacji:
+	* Bezpośrednie współdzielenie przestrzeni adresacji (zarówno kod, jak i dane)
+* Współdzielenie danych przez system plików lub komunikaty
+	Skutki kooperacji:
+	* Utrata spójności danych
+* Wzajemne blokowanie
+	
+
+Sekcja krytyczna (critical section) to segment kodu, w którym proces może zmieniać wartości zmiennych, aktualizować tabele, pisać do pliku, etc. Podstawową własnością sekcji krytycznej jest to, że w tym samym czasie żaden inny proces nie może realizować swojej sekcji krytycznej (obejmującej te same zasoby).
+
+
+1. Sekcja wejścia (entry section) - segment kodu, w którym zgłaszane jest żądanie dostępu do zasobu celem realizacji wzajemnego wykluczenia.
+2. Sekcja krytyczna (critical section)
+3. Sekcja wyjścia (exit section) - segment kodu, w którym zgłaszane jest zwolnienie zasobu.
+4. Sekcja pozostałego kodu (remainder section) - nie związana z obsługą współdzielenia zasobów część pozostała część kodu.
+
+
+Rozwiązanie problemu sekcji krytycznej musi spełniać następujące wymagania:
+* Wzajemne wykluczenie (mutual exclusion) oznacza, że jeśli jeden proces wykonuje swoją sekcję krytyczną, to żaden inny proces nie może wykonać swojej sekcji krytycznej.
+* Postęp (progress) oznacza, że jeśli żaden proces nie jest w sekcji krytycznej i jakiś proces chciałby wejść do swojej sekcji krytycznej, to tylko procesy nierealizujące swojej sekcji kodu pozostałego mogą brać udział w decydowaniu, który z nich wejdzie do swojej sekcji krytycznej.
+* Skończony czas oczekiwania (bounded waiting) oznacza, że czas oczekiwania na wejście do sekcji krytycznej dla każdego procesu powinien być ograniczo
+
+
+Zakleszczenie (deadlock) - sytuacja, kiedy dwa procesy wzajemnie czekają na zwolnienie zasobów
+
+
+Wywłaszczenie - technika, w której planista (algorytm szeregujący zadania, dispatcher) może wstrzymać aktualnie wykonywane zadanie, aby umożliwić wykonywanie innemu zadaniu. Zawieszenie (np. zapętlenie) zadania nie powoduje zawieszenia całego systemu.
+
+
+Wywłaszczenie jądra - jądro pozwala na wywłaszczenie własnego kodu, co oznacza, że w wykonywanie jego kodu może zostać przerwane na czas wykonywania przez procesor innego zadania.
+Wywłaszczanie przerwań - przerwania są zwykle niewywłaszczalne, dlatego powinny być krótkie.
+
+
+
+
+Cecha
+	Jądro wywłaszczające
+	Jądro niewywłaszczające
+	Definicja
+	Pozwala na usuwanie i podmianę procesu wykonywanego w trybie kernela, a w efekcie wykonywane jest zadanie o najwyższym priorytecie.
+	Pozwala na wywłaszczenie procesu wykonywanego w trybie kernela, co oznacza konieczność czekania na jego zakończenie.
+	Warunek wyścigu
+	Występuje - wiele procesów jest aktywnych
+	Nie występuje - jeden proces jest aktywny
+	Responsywność
+	Większa i deterministyczna responsywność
+	Mniejsza i niedeterministyczna responsywność
+	Implementacja
+	Skomplikowany projekt i implementacja
+	Mniej skomplikowany projekt i implementacja
+	Bezpieczeństwo
+	Większa stabilność pracy i użyteczność
+	Mniejsza stabilność pracy i użyteczność
+	Semafory
+	Nie wymaga użycia semaforów
+	Dane współdzielone wymagają semaforów
+	Programowanie RT
+	Większa użyteczność w programowaniu RT
+	Mniejsza użyteczność w programowaniu RT
+	Wywłaszczanie
+	Jest
+	Brak
+	Przykłady
+	Linux od 2.6, IRIX, Solaris, NetBSD od v5
+Microkernel: Windows NT, Vista, 7 i 10
+	Windows XP, Windows 2000, Linux do 2.4
+	
+
+
+
+
+
+
+
+Algorytm Petersona
+Dwa procesy P0 i P1 współdzielą:
+* int turn;
+* boolean flag[2];
+Zmienna turn wskazuje, którego procesu jest kolej na wejście do sekcji krytycznej. Tablica flag wskazuje, czy proces jest gotowy na wejście do sekcji krytycznej.
+
+
+Synchronizacja sprzętowa
+
+
+Test and set lock - TSL
+	* Wymagane wsparcie procesora do realizacji instrukcji atomowych
+* Realizacja sekwencyjna instrukcji atomowych (także w przypadku SMP)
+* Instrukcja atomowa: TestAndSet()
+	Swap
+	* Wymagane wsparcie procesora do realizacji instrukcji atomowych
+* Realizacja sekwencyjna instrukcji atomowych (także w przypadku SMP)
+* Instrukcja atomowa: Swap()
+* Inicjalizacja globalnych zmiennych:
+   * boolean waiting[n];
+   * boolean lock;
+	TSL + czas oczekiwania
+	* Połączenie Test and set lock oraz Swap
+* Spełniają wymaganie wzajemnego wykluczenia, ale nie spełniają wymagania dot. skończonego czasu oczekiwania
+	Semafory
+	* Semafor S to zmienna całkowita
+* Semafor można modyfikować tylko w:
+   * wait()
+   * signal()
+* Kiedy jeden proces modyfikuje semafor, żaden inny nie może tego robić
+* Testowanie warunku S <= 0 oraz inkrementacja S-- musi wykonać się bez przerwania
+* Typy semaforów:
+   * Semafor binarny (binary semaphore) = mutex lock od: mutual exclusion, czyli wzajemne wykluczenie Przy zastosowaniu do sekcji krytycznej:
+      * procesy współdzielą semafor, mutex = 1,
+      * każdy proces działa jak na listingu obok.
+* Semafor zliczający (counting semaphore) Zastosowanie do sekcji krytycznej, kiedy dany zasób ma wiele instancji.
+	
+
+Problemy synchronizacyjne:
+Problem ograniczonego bufora
+	Założenia:
+* Pula buforów, rozmiar puli wynosi n
+* Każdy bufor może zawierać jeden obiekt
+* Zmienna mutex jest semaforem b. do puli
+* Na początku mutex = 1
+* Semafory empty i full to liczność pustych/pełnych buforów
+* Na początku empty = n, full = 0
+	Problem czytelników i pisarzy
+	Założenia:
+* Istnieje współdzielona baza danych
+* Dwa typy procesów: piszące i czytające
+* Procesy czytające mogą w dowolnej liczbie osiągać dostęp do bazy
+* Jeśli jeden proces piszący ma dostęp, w tym czasie żaden inny proces (ani piszący, ani czytający) nie może mieć dostępu
+
+
+Warianty:
+1. Żaden proces czytający nie czeka na dostęp, chyba, że proces piszący go uzyskał. Ryzyko zagłodzenia pisarzy.
+2. Jeśli pisarz oczekuje na dostęp, żaden czytelnik nie może rozpocząć czytania. Może dojść do zagłodzenia czytelników.
+
+
+Rozwiązanie:
+* Czytelnicy współdzielą:
+   * semaphore mutex, wrt;      // init: 1
+   * int readcount;                     // init: 0
+* wrt jest wspólny także dla pisarzy
+* wrt jest muteksem obsługującym pisarzy
+* wrt jest także dla pierwszego i ostatniego czytelnika w sekcji krytycznej,
+* mutex obsługuje zmienną readcount
+* readcount - liczba aktualnie czytających
+	Problem ucztujących filozofów
+	Założenia:
+* Rozważmy pięciu filozofów siedzących przy stole jak na obrazku obok
+* Na środku stołu jest miska ryżu, wokół pięć talerzy, po jednym dla każdego filozofa
+* Pomiędzy talerzami jest pięć sztućców
+* Od czasu do czasu dany filozof chce zjeść
+* Aby zjeść muszą być wolne dwa sztućce
+* Jedząc filozof ma wyłączność na 2 sztućce
+* Po skończeniu jedzenia zwalnia sztućce
+
+
+Rozwiązania:
+* Filozof próbuje wziąć szczućce wywołując: wait()
+* Filozof odkłada sztućce wywołując: signal()
+* Filozofowie współdzielą sztućce:
+   * semaphore chopstick[5];    // init: 1
+* Max 4-ch filozofów przy stole
+* Można podnieść sztućce tylko wtedy, jeśli oba są wolne (podnieść w sekcji krytycznej)
+* Parzyści filozofowie podnoszą najpierw lewy, potem prawy sztuciec, a nieparzyści odwrotnie: najpierw prawy, potem lewy
+	
+
+
+
+
+
+Współdzielenie zasobów
+
+
+CPU
+	MEM
+	HDD
+	NET
+	współdzielenie w czasie
+	współdzielenie w ilości
+	współdzielenie w dostępie
+	współdzielenie w czasie
+	
+
+
+
+  
+
+Źródło: A. Silberschatz, Operating Systems Concepts Essentials
+
+
+
+
+Procesor + pamięć
+Procesor ładuje instrukcje tylko z pamięci głównej, więc każdy program musi być do niej najpierw załadowany.
+
+
+Pamięć główna (main memory, RAM - random-access memory) wykonana jest w technologii półprzewodnikowej zwanej DRAM
+
+
+Nie wszystko mieści się w pamięci RAM oraz pamięć ta jest ulotna, stąd wymagana jest pamięć dodatkowa, tj. secondary storage (hard-disk drives - HDDs lub nonvolatile memory - NVM).
+
+
+Pamięć główna oraz rejestry wbudowane w CPU to jedyna pamięć, którą CPU może adresować bezpośrednio.
+Jeśli dana, na której mają być wykonywane operacje znajduje się na którejkolwiek z pozostałych pamięci, musi zostać najpierw skopiowana w obszar o bezpośrednim dostępie.
+
+
+Adresowanie rejestrów, w odróżnieniu od adresowania pamięci głównej, zazwyczaj odbywa się w jednym takcie procesora.
+
+
+Aby w trakcie uzyskiwania dostępu do pamięci głównej procesor nie marnował cykli, wykorzystywany jest cache.
+
+
+Izolowanie pamięci
+  
+
+Źródło: A. Silberschatz, Operating Systems Concepts Essentials
+
+
+Izolacja pamięci dla każdego procesu gwarantuje indywidualną przestrzeń.
+
+
+Pamięć przydzieloną procesowi (na zmienne statyczne) wyznaczają dwa rejestry: baza i limit.
+
+
+Proces użytkownika (user mode) może zapisywać i odczytywać tylko pamięć w przydzielonym zakresie.
+
+
+System operacyjny (kernel mode) może swobodnie operować po całej pamięci, w szczególności zmieniać bazę i limit. Pozwala to na kontrolowanie innego oprogramowania.
+
+
+Wiązanie adresu
+Adres w kodzie programu może być symboliczny, np. nazwa zmiennej. Kompilator wiąże w/w adres symboliczny do adresu relokowalnego (względem danego modułu). Linker lub loader zamienia adres relokowalny w bezwzględny.
+
+
+Wiązanie może wystąpić na każdym z etapów:
+* Kompilacja (stare systemy),
+* Ładowanie (MS-DOS),
+* Wykonywanie - najczęściej (obecnie).
+
+
+Rodzaje adresów:
+Adres logiczny - adres widziany przez proces i dla niego dostępny.
+	Adres fizyczny - adres na szynie adresowej.
+	
+
+Translacją adresów zajmuje się MMU - Memory management unit.
+
+
+Wiązanie adresów w czasie:
+kompilacja
+	adres logiczny == adres fizyczny
+	ładowanie
+	adres logiczny == adres fizyczny
+	wykonywanie
+	adres logiczny != adres fizyczny
+	
+
+Adres wirtualny jest równoważny adresowi logicznemu w sytuacji wiązania w czasie wykonywania.
+
+
+Linkowanie
+
+
+Dynamiczne
+	Statyczne
+	Biblioteka systemowa linkowana do programu w momencie jego uruchomienia (wymaga wsparcia ze strony systemu operacyjnego) (DLL - Dynamic-Link Library). 
+
+
+Zalety DLL:
+* nie trzeba kopiować/implementować istniejących już modułów programu (oszczędność pamięci),
+* biblioteka może zostać jednokrotnie załadowana do pamięci, a wiele procesów może z niej korzystać,
+* biblioteki mogą być aktualizowane jednokrotnie, jakkolwiek każdy program może używać wskazanej wersji.
+	Włączanie biblioteki systemowej do obrazu binarnego programu.
+
+
+	
+
+Ochrona pamięci
+Każdy proces wskazany przez scheduler CPU do uruchomienia sprawdzany jest względem rejestrów:
+1. Relocation register (rejestr bazowy, rejestr relokacji) - początkowy adres fizyczny obszaru przeznaczonego dla procesu.
+2. Limit register - zawiera zakres adresów logicznych.
+Dzięki temu można chronić system operacyjny i inne programy przed modyfikacją przez ten program.
+
+
+Alokacja pamięci
+Metoda variable-partition - przypisanie procesu do zakresu pamięci i pamiętanie przez SO, które części pamięci są zajęte, a które wolne.
+
+
+Jeśli nie ma możliwości umieścić proces w pamięci:
+* proces nie jest uruchamiany
+* proces oczekuje w kolejce.
+
+
+
+
+
+
+Zarządzanie wolną przestrzenią (hole) obejmuje jej dzielenie i łączenie i nazywane jest dynamic storage allocation problem:
+1. First fit - pierwszy pasujący
+2. Best fit - najlepiej pasujący
+3. Worst fit - największy wolny
+
+
+
+
+Fragmentacja:
+W przypadku strategii first-fit i best-fit szybko dochodzi do tzw. fragmentacji zewnętrznej.
+
+
+Najgorszy przypadek fragmentacji: między każdą dwójką procesów jest wolna przestrzeń.
+
+
+Oprócz doboru strategii znaczenie ma też położenie nowego procesu (na początku czy na końcu wolnego miejsca?).
+
+
+Statystycznie, po pewnym czasie strategii first-fit aż 50% bloków zmarnowanych będzie na fragmentację.
+
+
+W przypadku podzielenia pamięci na bloki przydzielona pamięć dla danego procesu może być większa niż proces wymaga - różnica między wielkością przydzieloną a wymaganą to fragmentacja wewnętrzna.
+
+
+Rozwiązanie:
+* kompaktowanie (np. Java: garbage collection) - możliwe tylko w czasie działania.
+* stronicowanie.
+
+
+Stronicowanie:
+Stronicowanie powoduje, że logiczna przestrzeń adresowa jest nieciągła.
+
+
+Pamięć fizyczna dzielona jest na bloki, frames. Pamięć logiczna dzielona jest na strony tej samej wielkości, pages.
+
+
+Kiedy proces ma być wykonywany, jego strony ładowane są do ramek dostępnej pamięci. Każdy proces ma swoją tablicę stron.
+
+
+Rozmiar strony zależny jest od sprzętu i wynosi od 4KB do 1GB i ze względu na adresację jest potęgą 2 ($ getconf PAGESIZE).
+
+
+
+
+Pamięć wirtualna
+Procesy widzą pamięć fizyczną przez pamięć wirtualną.
+
+
+Pamięć wirtualna to technika pozwalająca na wykonywanie procesów, które nie są całkowicie w pamięci (m.in. np. z powodu ich rozmiaru).
+
+
+Pamięć wirtualna jest abstraktem pamięci głównej jako bardzo dużej macierzy, oddzielając pamięć logiczną przeznaczoną dla programisty od pamięci fizycznej.
+
+
+Pamięć wirtualna pozwala procesom na współdzielenie plików, bibliotek oraz implementację pamięci dzielonej.
+
+
+Pamięć wirtualna oddzielona jest od pamięci fizycznej.Dzięki temu możliwe jest stosowanie olbrzymiej pamięci wirtualnej przy niewielkiej pamięci fizycznej.
+
+
+Pamięć zapasowa (backing store, spaw space) - przestrzeń poza pamięcią główną.
+
+
+  
+
+Źródło: A. Silberschatz, Operating Systems Concepts Essentials
+
+
+
+
+Wirtualna przestrzeń adresowa
+Stack
+	Heap
+	Data
+	Miejsce, w którym dane umieszczane są w sposób uporządkowany, w tym miejscu odkładane są dane dotyczące wywołań funkcji, zmiennych (statyczne w tym globalne, automatyczne w tym lokalne). Miejscem tym zarządza program.
+	Miejsce, w którym dane umieszczane są swobodnie wg zapotrzebowania, zwykle przez wywołanie malloc/new, są to zmienne (dynamiczne). Miejscem tym zarządza programista.
+	Obszar o znanym w czasie kompilacji rozmiarze, w którym umieszczane są dane statyczne, w tym globalne.
+	
+
+Adresy wirtualne bibliotek systemowych mogą być mapowane z różnych procesów (w trybie tylko do odczytu) na wspólną część w przestrzeni adresów fizycznych.
+
+
+Procesy mogą współdzielić obszar pamięci (shared memory) celem wymiany komunikatów i ją też muszą adresować w przestrzeni adresów wirtualnych.
+
+
+Stronicowanie na żądanie - strona jest wprowadzana do pamięci wtedy, gdy jest potrzebna.
+  
+
+Tablica stron zawiera dodatkowo bity poprawności odwołania:
+1. 1 - strona znajduje się w pamięci głównej (valid)
+2. 0 - strona znajduje się poza pamięcią główną (invalid)
+Odwołanie do strony z bitem równym 0:
+* Błąd braku strony (page fault)
+* Obsługa błędu braku strony
+
+
+Obsługa błędu braku strony
+Gdy referencja ma stan invalid to:
+1. jeżeli strona w ogóle nie istnieje:
+* terminowanie procesu
+2. jeżeli strona jest dostępna w pamięci zapasowej:
+* wysłanie zgłoszenia do systemu operacyjnego o wczytanie strony z pamięci zapasowej
+* odnalezienie na liście wolnej ramki (system operacyjny zwykle stosuje technikę zero-fill-on-demand, która zeruje ramki przed użyciem; w momencie startu systemu, cała dostępna pamięć umieszczana jest na liście wolnych ramek) i wczytanie strony do tej ramki
+* aktualizacja tablicy stron
+* restart instrukcji, która wywołała błąd
+
+
+Przebieg stronicowania na żądanie:
+1. Odwołanie/przerwanie do systemu operacyjnego.
+2. Zapisz stan rejestrów oraz procesu.
+3. Stwierdź, że przerwanie wywołane było przez błąd strony.
+4. Sprawdź, czy odwołanie jest właściwe i określ położenie strony w pamięci zapasowej.
+5. Wywołaj odczyt z pamięci zapasowej do wolnej ramki:
+   1. Czekaj w kolejce, aż żądanie odczytu zostanie obsłużone.
+   2. Odczekaj czas działania urządzenia.
+   3. Rozpocznij transfer strony do wolnej ramki.
+6. Podczas oczekiwania, przekaż CPU innemu procesowi.
+7. Przechwyć przerwanie z podsystemu I/O (zakończenie wczytywania).
+8. Zapisz rejestry oraz stan innego procesu (jeśli krok 6 jest wykonany).
+9. Określ, że przerwanie było z pamięci zapasowej.
+10. Zaktualizuj tablicę stron, aby wskazać, że określona strona jest teraz w pamięci.
+11. Czekaj, aż CPU zostanie przypisany znów temu procesowi.
+12. Wznów rejestry, stan procesu oraz nową tablicę stron i wznów działanie procesu.
+
+
+Problem: Stronicowanie na żądanie zajmuje bardzo dużo czasu!
+
+
+Copy-on-Write w technice fork() pozwala na współdzielenie tych samych stron w pamięci. Tylko ta strona, która jest modyfikowana wymaga kopiowania. Często po fork() występuje exec() i wtedy okazuje się, że kopiowanie w ogóle nie jest potrzebne.
+
+
+Over-allocation to termin, który odnosi się do sytuacji, w których zasoby są alokowane na nadmiernym poziomie.
+
+
+Zastępowanie stron
+1. Znajdź stronę w pamięci zapasowej.
+2. Szukaj wolnej ramki:
+   1. Jeśli jest, użyj jej.
+   2. Jeśli brak, użyj algorytmu wyboru ramki podlegającej wymiane (victim frame).
+   3. Zapisz jej zawartość do pamięci zapasowej, zaktualizuj tablice ramek i stron.
+3. Wczytaj oczekiwaną stronę do zwolnionej ramki. Zaktualizuj tablice ramek i stron.
+4. Kontynuuj działanie procesu.
+
+
+Celem optymalizacji stosuje się bit modyfikacji, tzn. brudny bit (dirty bit). Np. strony z kodem programu zasadniczo są read-only.
+
+
+Algorytmy zastępowania stron:
+Algorytm FIFO
+	Najstarsza z umieszczonych w pamięci stron (głowa) jest zastępowana, nowe strony umieszczane są na końcu kolejki (ogon),
+
+
+Wady:
+* z jednej strony strona zastępowana może być czymś, co było dawno temu umieszczone w pamięci i jest już nieużywane, ale może to być też często używana zmienna istniejaca od początku procesu.
+	Optymalne zastępowanie stron
+	Zastąp stronę, która nie będzie używana przez najdłuższy czas.
+
+
+Wady:
+* trzeba znać przyszłość
+	Algorytm LRU - least recently used
+	Zastąp stronę, która najdłużej nie była używana,
+
+
+Implementacje:
+* liczniki (timestamp ostatniego użycia)
+* stos (przekładanie na wierzch użytej strony)
+	
+
+Strategie alokacji ramek:
+1. Minimalna liczba ramek - określona jest minimalna liczba ramek, które muszą zostać zaalokowane. Powód: im mniej zaalokowanych ramek, tym bardziej spada wydajność wykonywanych procesów.
+2. Równa alokacja - ramki po równo podzielone są między procesy
+3. Proporcjonalna alokacja - ramki przydzielane są proporcjonalnie do wielkości procesów.
+
+
+Alokacja globalna / zastępowanie globalne
+	Alokacja lokalna / zastępowanie lokalne
+	Realizacja procesu wymaga zastępowania ramek pośród wszystkich ramek, także tych zaalokowanych do innego procesu.
+
+
+Alokacja globalna ma szczególne zastosowanie w przypadku priorytetyzowania procesów.
+	Realizacja procesu wymaga zastępowania ramek tylko pośród zaalokowanych do procesu.
+
+
+	
+
+Major page fault - występuje wtedy, gdy strona jest wywoływana, a nie znajduje się w pamięci. Obsługa tego błędu wymaga odczytania wskazanej strony z pamięci zapasowej do wolnej ramki i aktualizacji tablicy stron. Stronicowanie na żądanie zwykle generuje znaczną liczbę tych błędów.
+
+
+Minor page fault - występuje wtedy, gdy proces nie ma logicznego mapowania do strony, ale ta strona jest w pamięci. Błąd ten występuje w jednym z przypadków:
+* Proces odwołuje się do biblioteki dzielonej, która jest w pamięci, ale proces nie ma do niej mapowania. W tym przypadku wystarczy zaktualizować tablicę stron.
+* Proces utracił stronę, która trafiła na listę wolnych ramek, ale nie została jeszcze wyzerowana. W tym przypadku strona jest ponownie przypisana do procesu i usunięta z listy wolnych ramek.
+
+
+Przydatne polecenie:
+        $ ps -eo min_flt, maj_flt, cmd
+Cyberbezpieczeństwo, Systemy operacyjne 23/24
+Na podstawie wykładów dr hab. inż. Krzysztofa Rzeckiego, prof. AGH.
